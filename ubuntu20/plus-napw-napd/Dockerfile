@@ -2,6 +2,10 @@
 # For Ubuntu 20.04:
 FROM ubuntu:focal
 
+# for referencing this files on git repository tree 
+ARG ${OS_TYPE}
+ARG ${IMAGE_TYPE}
+
 # Install prerequisite packages:
 RUN apt-get update && apt-get install -y apt-transport-https lsb-release ca-certificates wget gnupg2
 
@@ -30,8 +34,8 @@ RUN ln -sf /dev/stdout /var/log/nginx/access.log \
     && ln -sf /dev/stderr /var/log/nginx/error.log
 
 # Copy configuration files:
-COPY nginx.conf /etc/nginx/
-COPY conf.d /etc/nginx/conf.d/
-COPY entrypoint.sh /root/
+COPY ${OS_TYPE}/${IMAGE_TYPE}/nginx.conf /etc/nginx/
+COPY ${OS_TYPE}/${IMAGE_TYPE}/conf.d /etc/nginx/conf.d/
+COPY ${OS_TYPE}/${IMAGE_TYPE}/entrypoint.sh /root/
 
 CMD ["sh", "/root/entrypoint.sh"]

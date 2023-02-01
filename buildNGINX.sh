@@ -11,7 +11,7 @@ $0 [options]\n\n
 -i [image type]\t- NGINX image type name\n
 -C [file.crt]\t\t- Certificate file to pull packages from the official NGINX repository\n
 -K [file.key]\t\t- Key file to pull packages from the official NGINX repository\n
--p \t\t- Push Docker image to registry\n
+-p \t\t\t- Push Docker image to registry\n
 "
 
 BASEGITURL="url = https://github.com/BeF5/f5j-nginx-docker.git"
@@ -136,11 +136,15 @@ then
     DOCKER_BUILDKIT=1 \
     docker build --no-cache \
       -f ${OS_TYPE}/${IMAGE_TYPE}/Dockerfile \
-      --secret id=nginx-key,src=$NGINX_KEY --secret id=nginx-crt,src=$NGINX_CERT
+      --secret id=nginx-key,src=$NGINX_KEY --secret id=nginx-crt,src=$NGINX_CERT \
+      --build-arg OS_TYPE=${OS_TYPE} \
+      --build-arg IMAGE_TYPE=${IMAGE_TYPE} \
+      .
+      
 else
     DOCKER_BUILDKIT=1 \
     docker build --no-cache \
-      -f ${OS_TYPE}/${IMAGE_TYPE}/Dockerfile \
+      -f ${OS_TYPE}/${IMAGE_TYPE}/Dockerfile .\
 fi
 
 echo "==> Building NGINX docker image finished."
