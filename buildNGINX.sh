@@ -46,7 +46,7 @@ do
                         echo "=== Target OS / NGINX image:"
                         echo "|--<<base OS Image>>"
                         echo "|  |--<<NGINX image type>>"
-                        find . -type d -name .git -prune -o -type d  | sort | sed '2d;s/^\.//;s/\/\([^/]*\)$/|--\1/;s/\/[^/|]*/|  /g'
+                        find . -type d -name .git -prune -o -type d -maxdepth 2  | sort | sed '2d;s/^\.//;s/\/\([^/]*\)$/|--\1/;s/\/[^/|]*/|  /g'
                         exit
                 ;;
                 o)
@@ -114,20 +114,9 @@ then
         echo "=== Target OS / NGINX image:"
         echo "|--<<base OS Image>>"
         echo "|  |--<<NGINX image type>>"
-        find . -type d -name .git -prune -o -type d  | sort | sed '2d;s/^\.//;s/\/\([^/]*\)$/|--\1/;s/\/[^/|]*/|  /g'
+        find . -type d -name .git -prune -o -type d  -maxdepth 2 | sort | sed '2d;s/^\.//;s/\/\([^/]*\)$/|--\1/;s/\/[^/|]*/|  /g'
         exit
 fi
-
-
-#if [ -z "${AUTOMATED_INSTALL}" ]
-#then
-#        docker build --no-cache -f Dockerfile.manual --build-arg NIM_DEBFILE=$DEBFILE --build-arg BUILD_WITH_SECONDSIGHT=$COUNTER \
-#                --build-arg ACM_IMAGE=$ACM_IMAGE --build-arg SM_IMAGE=$SM_IMAGE --build-arg PUM_IMAGE=$PUM_IMAGE -t $IMGNAME .
-#else
-#        DOCKER_BUILDKIT=1 docker build --no-cache -f Dockerfile.automated --secret id=nginx-key,src=$NGINX_KEY --secret id=nginx-crt,src=$NGINX_CERT \
-#                --build-arg ADD_ACM=$ADD_ACM --build-arg ADD_SM=$ADD_SM --build-arg ADD_PUM=$ADD_PUM --build-arg BUILD_WITH_SECONDSIGHT=$COUNTER \
-#                -t $IMGNAME .
-#fi
 
 echo "==> Building NGINX docker image"
 
@@ -138,13 +127,17 @@ then
       -f ${OS_TYPE}/${IMAGE_TYPE}/Dockerfile \
       --secret id=nginx-key,src=$NGINX_KEY --secret id=nginx-crt,src=$NGINX_CERT \
       --build-arg OS_TYPE=${OS_TYPE} \
-      --build-arg IMAGE_TYPE=${IMAGE_TYPE} \
-      .
-      
+      --build-arg IMAGE_TYPE=${IMAGE_TYPE} .
 else
     DOCKER_BUILDKIT=1 \
     docker build --no-cache \
-      -f ${OS_TYPE}/${IMAGE_TYPE}/Dockerfile .\
+      -f ${OS_TYPE}/${IMAGE_TYPE}/Dockerfile .
+fi
+
+if [ $? != 0 ]
+then
+    echo "Container Build is Failed."
+    exit
 fi
 
 echo "==> Building NGINX docker image finished."
@@ -155,6 +148,13 @@ if "${PUSHIMG}"
 then
    echo "Push docker image."
    docker push $IMG_NAME
+fi
+
+
+if [ $? != 0 ]
+then
+    echo "Container Image Push is Failed."
+    exit
 fi
 
 echo "==> Pushing NGINX docker image finished."
