@@ -17,7 +17,7 @@ RUN wget https://cs.nginx.com/static/keys/nginx_signing.key && apt-key add nginx
 RUN printf "deb https://pkgs.nginx.com/plus/ubuntu `lsb_release -cs` nginx-plus\n" | tee /etc/apt/sources.list.d/nginx-plus.list
 
 # Add NGINX Plus and NGINX App Protect DoS repository:
-RUN printf "deb https://pkgs.nginx.com/app-protect/ubuntu `lsb_release -cs` nginx-plus\n" | tee /etc/apt/sources.list.d/nginx-app-protect.list \
+RUN printf "deb https://pkgs.nginx.com/app-protect/ubuntu `lsb_release -cs` nginx-plus\n" | tee /etc/apt/sources.list.d/nginx-app-protect.list
 RUN printf "deb https://pkgs.nginx.com/app-protect-dos/ubuntu `lsb_release -cs` nginx-plus\n" | tee /etc/apt/sources.list.d/nginx-app-protect-dos.list
  
 # Download the apt configuration to `/etc/apt/apt.conf.d`:
@@ -33,6 +33,7 @@ RUN ln -sf /dev/stdout /var/log/nginx/access.log \
     && ln -sf /dev/stderr /var/log/nginx/error.log
 
 # Copy configuration files:
+RUN  mv /etc/nginx/conf.d/default.conf /etc/nginx/conf.d/default.conf-
 COPY ${OS_TYPE}/${IMAGE_TYPE}/nginx.conf /etc/nginx/
 COPY ${OS_TYPE}/${IMAGE_TYPE}/conf.d /etc/nginx/conf.d/
 COPY ${OS_TYPE}/${IMAGE_TYPE}/entrypoint.sh /root/
