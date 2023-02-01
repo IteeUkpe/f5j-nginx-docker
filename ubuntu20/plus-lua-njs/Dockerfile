@@ -19,16 +19,13 @@ RUN printf "deb https://pkgs.nginx.com/plus/ubuntu `lsb_release -cs` nginx-plus\
 # Download the apt configuration to `/etc/apt/apt.conf.d`:
 RUN wget -P /etc/apt/apt.conf.d https://cs.nginx.com/static/files/90pkgs-nginx
 
-# Update the repository and install the most recent version of the NGINX App Protect WAF & DoS package (which includes NGINX Plus):
+# Update the repository and install the most recent version of the NGINX Plus , Lua , NJS Modules:
 RUN --mount=type=secret,id=nginx-crt,dst=/etc/ssl/nginx/nginx-repo.crt,mode=0644 \
     --mount=type=secret,id=nginx-key,dst=/etc/ssl/nginx/nginx-repo.key,mode=0644 \
     apt-get update && DEBIAN_FRONTEND="noninteractive" \
     apt-get install -y nginx-plus \
-                       app-protect \
-                       app-protect-attack-signatures \
-                       app-protect-dos \
                        nginx-plus-module-njs \
-                       nginx-plus-module-lua \
+                       nginx-plus-module-lua
 
 # Forward request logs to Docker log collector:
 RUN ln -sf /dev/stdout /var/log/nginx/access.log \

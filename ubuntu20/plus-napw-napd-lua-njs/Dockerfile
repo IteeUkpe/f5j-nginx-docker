@@ -33,7 +33,7 @@ RUN --mount=type=secret,id=nginx-crt,dst=/etc/ssl/nginx/nginx-repo.crt,mode=0644
                        app-protect-attack-signatures \
                        app-protect-dos \
                        nginx-plus-module-njs \
-                       nginx-plus-module-lua \
+                       nginx-plus-module-lua
 
 # Forward request logs to Docker log collector:
 RUN ln -sf /dev/stdout /var/log/nginx/access.log \
