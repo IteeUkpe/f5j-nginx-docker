@@ -1,4 +1,4 @@
-#!/bin/bash
+d #!/bin/bash
 
 BANNER="NGINX Docker image builder\n\n
 This tool builds a NGINX Plus Docker image\n\n
@@ -9,6 +9,7 @@ $0 [options]\n\n
 -t [target image]\t- Docker image name to be created\n
 -o [base OS image]\t- base OS image name\n
 -i [image type]\t- NGINX image type name\n
+-n [NMS URL]\t- NMS(NGINX Management Suite) URL (https://nms-fqdn)
 -C [file.crt]\t\t- Certificate file to pull packages from the official NGINX repository\n
 -K [file.key]\t\t- Key file to pull packages from the official NGINX repository\n
 -p \t\t\t- Push Docker image to registry\n
@@ -38,7 +39,7 @@ then
 fi
 
 # check option
-while getopts 'ho:i:t:C:K:p' OPTION
+while getopts 'ho:i:t:C:K:p:n' OPTION
 do
         case "$OPTION" in
                 h)
@@ -63,6 +64,9 @@ do
                 ;;
                 K)
                         NGINX_KEY=$OPTARG
+                ;;
+                n)
+                        NMS_URL=$OPTARG
                 ;;
                 p)
                         PUSHIMG=true
@@ -101,9 +105,15 @@ then
         exit
 fi
 
-if ([[ "plus" =~ ${IMAGE_TYPE}  ]] && ([ -z "${NGINX_CERT}" ] || [ -z "${NGINX_KEY}" ]))
+if ([[ ${IMAGE_TYPE} =~ "plus"  ]] && ([ -z "${NGINX_CERT}" ] || [ -z "${NGINX_KEY}" ]))
 then
         echo "NGINX certificate and key are required for building NGINX Plus docker images"
+        exit
+fi
+
+if ([[ ${IMAGE_TYPE} =~ "agent"  ]] && [ -z "${NMS_URL}" ] )
+then
+        echo "NMS(NGINX Management Suite) URL (https://nms-fqdn) are required for NGINX agent installation"
         exit
 fi
 
@@ -128,11 +138,13 @@ then
       --secret id=nginx-key,src=$NGINX_KEY --secret id=nginx-crt,src=$NGINX_CERT \
       --build-arg OS_TYPE=${OS_TYPE} \
       --build-arg IMAGE_TYPE=${IMAGE_TYPE} \
+      --build-arg NMS_URL=${NMS_URL} \
       -t $IMG_NAME .
 else
     DOCKER_BUILDKIT=1 \
     docker build --no-cache \
       -f ${OS_TYPE}/${IMAGE_TYPE}/Dockerfile \
+      --build-arg NMS_URL=${NMS_URL} \
       -t $IMG_NAME .
 fi
 
