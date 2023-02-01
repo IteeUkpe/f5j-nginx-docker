@@ -120,18 +120,20 @@ fi
 
 echo "==> Building NGINX docker image"
 
-if [[ "plus" =~ ${IMAGE_TYPE}  ]] 
+if [[ ${IMAGE_TYPE} =~ "plus" ]] 
 then
     DOCKER_BUILDKIT=1 \
     docker build --no-cache \
       -f ${OS_TYPE}/${IMAGE_TYPE}/Dockerfile \
       --secret id=nginx-key,src=$NGINX_KEY --secret id=nginx-crt,src=$NGINX_CERT \
       --build-arg OS_TYPE=${OS_TYPE} \
-      --build-arg IMAGE_TYPE=${IMAGE_TYPE} .
+      --build-arg IMAGE_TYPE=${IMAGE_TYPE} \
+      -t $IMG_NAME .
 else
     DOCKER_BUILDKIT=1 \
     docker build --no-cache \
-      -f ${OS_TYPE}/${IMAGE_TYPE}/Dockerfile .
+      -f ${OS_TYPE}/${IMAGE_TYPE}/Dockerfile \
+      -t $IMG_NAME .
 fi
 
 if [ $? != 0 ]
