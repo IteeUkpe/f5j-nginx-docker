@@ -11,20 +11,20 @@ echo "NMS_TAGS: $NMS_TAGS"
 
 PARM="--server-grpcport $NMS_GRPC_PORT --server-host $NMS_HOST"
 
-#if ( [[ ! -z "$NMS_INSTANCEGROUP" ]] && [[ ! -z "$NMS_TAGS" ]] ); then
+if ( [ -n "$NMS_INSTANCEGROUP" ] && [ -n "$NMS_TAGS" ] ); then
    PARM="${PARM} --instance-group $NMS_INSTANCEGROUP --tags $NMS_TAGS"
-#fi
+fi
 
-#if ( [[ ! -z "$NMS_INSTANCEGROUP" ]] && [[ -z "$NMS_TAGS" ]] ); then
+if ( [ -n "$NMS_INSTANCEGROUP" ] && [ -z "$NMS_TAGS" ] ); then
    PARM="${PARM} --instance-group $NMS_INSTANCEGROUP"
-#fi
+fi
 
-#if ( [[ -z "$NMS_INSTANCEGROUP" ]] && [[ ! -z "$NMS_TAGS" ]] ); then
+if ( [ -z "$NMS_INSTANCEGROUP" ] && [ -n "$NMS_TAGS" ] ); then
    PARM="${PARM} --tags $NMS_TAGS"
-#fi
+fi
 
 # RUN NGINX agent
-#if ( [[ ! -z "$NMS_GRPC_PORT" ]] && [[ ! -z "$NMS_HOST" ]] ); then
+if ( [ -n "$NMS_GRPC_PORT" ] && [ -n "$NMS_HOST" ] ); then
    nginx-agent $PARM
-#fi
+fi
 

@@ -10,5 +10,6 @@ chown ${USER}:${USER} /var/run/adm /tmp/cores ${LOGDIR}
    
 # run processes
 /bin/su -s /bin/bash -c "/usr/bin/adminstall --daemons 1 --memory 200 > ${LOGDIR}/adminstall.log 2>&1" ${USER}
-/usr/sbin/nginx -g 'daemon off;' &
 /bin/su -s /bin/bash -c "/usr/bin/admd -d --log info > ${LOGDIR}/admd.log 2>&1 &" ${USER}
+
+/usr/sbin/nginx -g 'daemon off;'
