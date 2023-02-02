@@ -1,0 +1,27 @@
+version: '3'
+services:
+    httpbin-app:
+        image: kennethreitz/httpbin
+        environment:
+            - "GUNICORN_CMD_ARGS=\"--capture-output --error-logfile - --access-logfile - --access-logformat \"%(h)s %(t)s %(r)s %(s)s Host: %({Host}i)s}\"\""
+        expose:
+         - "80"
+    nginx-lb:
+        image: agent-plus:latest
+        hostname: agent-plus
+        ports:
+        - "80:80"
+        - "8080:8080"
+        environment:
+         - NMS_HOST=10.1.1.5
+         - NMS_GRPC_PORT=443
+    nginx-gw:
+        image: plus:latest
+        hostname: plus
+        deploy:
+            replicas: 2
+        environment:
+         - NMS_HOST=10.1.1.5
+         - NMS_GRPC_PORT=443
+         - NMS_INSTANCEGROUP=pluscluster
+         - NSM_TAG=proxy
