@@ -41,7 +41,7 @@ then
 fi
 
 # check option
-while getopts 'ho:i:t:C:K:p:n:N:W:S:D:' OPTION
+while getopts 'ho:i:t:C:K:p:n:' OPTION
 do
         case "$OPTION" in
                 h)
@@ -69,18 +69,6 @@ do
                 ;;
                 n)
                         NMS_URL=$OPTARG
-                ;;
-                N)
-                        NGINX_VER=$OPTARG
-                ;;
-                W)
-                        NAPWAF_VER=$OPTARG
-                ;;
-                D)
-                        NAPDOS_VER=$OPTARG
-                ;;
-                S)
-                        WAFSIG_VER=$OPTARG
                 ;;
                 p)
                         PUSHIMG=true
@@ -153,10 +141,6 @@ then
       --build-arg OS_TYPE=${OS_TYPE} \
       --build-arg IMAGE_TYPE=${IMAGE_TYPE} \
       --build-arg NMS_URL=${NMS_URL} \
-      --build-arg NGINX_VER=${NPLUS_VER} \
-      --build-arg NAPWAF_VER=${NAPWAF_VER} \
-      --build-arg NAPDOS_VER=${NAPDOS_VER} \
-      --build-arg WAFSIG_VER=${WAFSIG_VER} \
       -t $IMG_NAME .
 else
     DOCKER_BUILDKIT=1 \
@@ -165,7 +149,6 @@ else
       --build-arg OS_TYPE=${OS_TYPE} \
       --build-arg IMAGE_TYPE=${IMAGE_TYPE} \
       --build-arg NMS_URL=${NMS_URL} \
-      --build-arg NGINX_VER=${NPLUS_VER} \
       -t $IMG_NAME .
 fi
 
