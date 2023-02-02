@@ -16,5 +16,5 @@ nap_monitoring:
   # Syslog server port the collector will be listening to
   syslog_port: 514
   #We set to 10 so that event logs push out to NMS faster for demonstration
-  report_count: 10
+  #report_count: 10
   

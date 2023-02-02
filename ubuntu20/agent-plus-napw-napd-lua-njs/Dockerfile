@@ -7,6 +7,40 @@ ARG OS_TYPE
 ARG IMAGE_TYPE
 # for access NMS to install NGINX agent
 ARG NMS_URL
+# install version for NGINX Plus / NAP WAF / DoS
+ARG NGINX_VER
+ARG NAPWAF_VER
+ARG NAPDOS_VER
+ARG WAFSIG_VER
+
+if [ -n ${NGINX_VER} ]
+then 
+    NPLUS="nginx-plus=${NGINX_VER}"
+else 
+    NPLUS="nginx-plus"
+fi
+
+if [ -n ${NAPWAF_VER} ]
+then 
+    NAPWAF="app-protect=${NAPWAF_VER}"
+else 
+    NAPWAF="app-protect"
+fi
+
+if [ -n ${NAPDOS_VER} ]
+then 
+    NAPDOS="app-protect-dos=${NAPDOS_VER}"
+else 
+    NAPDOS="app-protect-dos"
+fi
+
+if [ -n ${WAFSIG_VER} ]
+then 
+    WAFSIG="app-protect-attack-signatures=${WAFSIG_VER}"
+else 
+    WAFSIG="app-protect-attack-signatures"
+fi
+
 
 # Install prerequisite packages:
 RUN apt-get update && apt-get install -y apt-transport-https lsb-release ca-certificates wget gnupg2
@@ -30,10 +64,10 @@ RUN wget -P /etc/apt/apt.conf.d https://cs.nginx.com/static/files/90pkgs-nginx
 RUN --mount=type=secret,id=nginx-crt,dst=/etc/ssl/nginx/nginx-repo.crt,mode=0644 \
     --mount=type=secret,id=nginx-key,dst=/etc/ssl/nginx/nginx-repo.key,mode=0644 \
     apt-get update && DEBIAN_FRONTEND="noninteractive" \
-    apt-get install -y nginx-plus \
-                       app-protect \
-                       app-protect-attack-signatures \
-                       app-protect-dos \
+    apt-get install -y $NPLUS \
+                       $NAPWAF \
+                       $WAFSIG \
+                       $NAPDOS \
                        nginx-plus-module-njs \
                        nginx-plus-module-lua \
 # NMS Agent installation
