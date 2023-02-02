@@ -1,4 +1,4 @@
-d #!/bin/bash
+#!/bin/bash
 
 BANNER="NGINX Docker image builder\n\n
 This tool builds a NGINX Plus Docker image\n\n
@@ -9,7 +9,7 @@ $0 [options]\n\n
 -t [target image]\t- Docker image name to be created\n
 -o [base OS image]\t- base OS image name\n
 -i [image type]\t- NGINX image type name\n
--n [NMS URL]\t- NMS(NGINX Management Suite) URL (https://nms-fqdn)
+-n [NMS URL]\t- NMS(NGINX Management Suite) URL (https://nms-fqdn)\n
 -C [file.crt]\t\t- Certificate file to pull packages from the official NGINX repository\n
 -K [file.key]\t\t- Key file to pull packages from the official NGINX repository\n
 -p \t\t\t- Push Docker image to registry\n
@@ -17,8 +17,6 @@ $0 [options]\n\n
 
 BASEGITURL="url = https://github.com/BeF5/f5j-nginx-docker.git"
 GITURL=`grep url .git/config`
-
-
 
 # Defaults
 INVALID_WORKDIR=true
@@ -39,7 +37,7 @@ then
 fi
 
 # check option
-while getopts 'ho:i:t:C:K:p:n' OPTION
+while getopts 'ho:i:t:C:K:p:n:' OPTION
 do
         case "$OPTION" in
                 h)

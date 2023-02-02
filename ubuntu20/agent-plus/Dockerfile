@@ -5,6 +5,8 @@ FROM ubuntu:focal
 # for referencing this files on git repository tree 
 ARG OS_TYPE
 ARG IMAGE_TYPE
+# for access NMS to install NGINX agent
+ARG NMS_URL
 
 # Install prerequisite packages:
 RUN apt-get update && apt-get install -y apt-transport-https lsb-release ca-certificates wget gnupg2
