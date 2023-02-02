@@ -28,11 +28,6 @@ RUN --mount=type=secret,id=nginx-crt,dst=/etc/ssl/nginx/nginx-repo.crt,mode=0644
 # NMS Agent installation
                    && bash -c 'wget --no-check-certificate $NMS_URL/install/nginx-agent -O - | sh' && echo "Agent installed from NMS"
 
-# NMS Agent installation
-RUN bash -c 'echo $NMS_RUL'
-RUN bash -c 'curl -I -k $NMS_URL/install/nginx-agent'
-RUN bash -c 'curl -k $NMS_URL/install/nginx-agent | sh' && echo "Agent installed from NMS"
-
 # Forward request logs to Docker log collector:
 RUN ln -sf /dev/stdout /var/log/nginx/access.log \
     && ln -sf /dev/stderr /var/log/nginx/error.log

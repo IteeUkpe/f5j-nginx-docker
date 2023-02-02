@@ -19,15 +19,15 @@ services:
         image: agent-plus-napw:latest
         hostname: agent-plus-napw
         deploy:
-            replicas: 2
+            replicas: 1
         environment:
          - NMS_HOST=10.1.1.5
          - NMS_GRPC_PORT=443
-         - NMS_INSTANCEGROUP=napwcluster
-         - NMS_TAG=napwproxy
-    nginx-gw:
+         - NMS_INSTANCEGROUP=napw-cluster
+         - NMS_TAG=napw-proxy
+    nginx-gw2:
         image: plus:latest
         hostname: plus
         deploy:
-            replicas: 2
+            replicas: 1
 
