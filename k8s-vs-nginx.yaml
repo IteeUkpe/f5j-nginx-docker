@@ -1,0 +1,98 @@
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: nginx-plus
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: nginx-plus
+  template:
+    metadata:
+      labels:
+        app: nginx-plus
+    spec:
+      containers:
+      - name: nginx-plus
+        image: registry.example.com/plus:latest
+        ports:
+        - containerPort: 80
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: nginx-plus-napw
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: nginx-plus-napw
+  template:
+    metadata:
+      labels:
+        app: nginx-plus-napw
+    spec:
+      containers:
+      - name: agent-plus-napw
+        image: registry.example.com/agent-plus-napw:latest
+        ports:
+        - containerPort: 80
+        env:
+        - name: NMS_HOST
+          value: "10.1.1.5"
+        - name: NMS_GRPC_PORT
+          value: "443"
+        - name: NMS_INSTANCEGROUP
+          value: "k8s-napwcluster"
+        - name: NMS_TAG
+          value: "k8s-napwproxy"
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: nginx-plus-napw-svc
+  labels:
+spec:
+  ports:
+  - port: 80
+    targetPort: 80
+    protocol: TCP
+    name: http
+  selector:
+    app: nginx-plus-napw
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: nginx-plus-svc
+  labels:
+spec:
+  ports:
+  - port: 80
+    targetPort: 80
+    protocol: TCP
+    name: http
+  selector:
+    app: nginx-plus
+---
+apiVersion: k8s.nginx.org/v1
+kind: VirtualServer
+metadata:
+  name: nginx-plus-webapp
+spec:
+  host: webapp.example.com
+  upstreams:
+  - name: nginx-plus-napw
+    service: nginx-plus-napw-svc
+    port: 80
+  - name: nginx-plus
+    service: nginx-plus-svc
+    port: 80
+  routes:
+  - path: /napw
+    action:
+      pass: nginx-plus-napw
+  - path: /
+    action:
+      pass: nginx-plus
