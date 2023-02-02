@@ -26,6 +26,9 @@ echo "NMS_GRPC_PORT: $NMS_GRPC_PORT"
 echo "NMS_INSTANCEGROUP: $NMS_INSTANCEGROUP"
 echo "NMS_TAGS: $NMS_TAGS"
 
+# Enable NGINX App Protect WAF Status Reporting
+cat /etc/nginx/conf.d/nginx-agent.conf-add >> /etc/nginx-agent/nginx-agent.conf
+
 PARM="--server-grpcport $NMS_GRPC_PORT --server-host $NMS_HOST"
 
 if ( [ -n "$NMS_INSTANCEGROUP" ] && [ -n "$NMS_TAGS" ] ); then
