@@ -41,7 +41,7 @@ then
 fi
 
 # check option
-while getopts 'ho:i:t:C:K:p:n:' OPTION
+while getopts 'ho:i:t:C:K:p:n:N:W:S:D:' OPTION
 do
         case "$OPTION" in
                 h)
@@ -162,7 +162,10 @@ else
     DOCKER_BUILDKIT=1 \
     docker build --no-cache \
       -f ${OS_TYPE}/${IMAGE_TYPE}/Dockerfile \
+      --build-arg OS_TYPE=${OS_TYPE} \
+      --build-arg IMAGE_TYPE=${IMAGE_TYPE} \
       --build-arg NMS_URL=${NMS_URL} \
+      --build-arg NGINX_VER=${NPLUS_VER} \
       -t $IMG_NAME .
 fi
 
