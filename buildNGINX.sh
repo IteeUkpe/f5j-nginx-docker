@@ -12,9 +12,6 @@ $0 [options]\n\n
 -n [NMS URL]\t- NMS(NGINX Management Suite) URL (https://nms-fqdn)\n
 -C [file.crt]\t\t- Certificate file to pull packages from the official NGINX repository\n
 -K [file.key]\t\t- Key file to pull packages from the official NGINX repository\n
--N [NGINX Version]\t\t- NGINX Version that is installed Container\n
--W [NAP WAF Version]\t\t- NAP WAF Version that is installed to Container\n
--S [NAP WAF Signature Version]\t\t- NAP WAF Attack Signature Version that is installed to Container\n
 -D [NAP DoS Version]\t\t- NAP DoS Version ithat is installed to Container\n
 -p \t\t\t- Push Docker image to registry\n
 "
