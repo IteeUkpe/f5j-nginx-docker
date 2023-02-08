@@ -46,7 +46,7 @@ do
                         echo "=== Target OS / NGINX image:"
                         echo "|--<<base OS Image>>"
                         echo "|  |--<<NGINX image type>>"
-                        find . -maxdepth 2 -type d -name .git -prune -o -type d  | sort | sed '2d;s/^\.//;s/\/\([^/]*\)$/|--\1/;s/\/[^/|]*/|  /g'
+                        find . -maxdepth 2 -type d -name .git -prune -o -type d  | sort | sed '2d;s/^\.//;s/\/\([^/]*\)$/|-- \1/;s/\/[^/|]*/|  /g'
                         exit
                 ;;
                 o)
@@ -123,7 +123,7 @@ then
         echo "=== Target OS / NGINX image:"
         echo "|--<<base OS Image>>"
         echo "|  |--<<NGINX image type>>"
-        find . -maxdepth 2 -type d -name .git -prune -o -type d  | sort | sed '2d;s/^\.//;s/\/\([^/]*\)$/|--\1/;s/\/[^/|]*/|  /g'
+        find . -maxdepth 2 -type d -name .git -prune -o -type d  | sort | sed '2d;s/^\.//;s/\/\([^/]*\)$/|-- \1/;s/\/[^/|]*/|  /g'
         exit
 fi
 
