@@ -12,7 +12,6 @@ $0 [options]\n\n
 -n [NMS URL]\t- NMS(NGINX Management Suite) URL (https://nms-fqdn)\n
 -C [file.crt]\t\t- Certificate file to pull packages from the official NGINX repository\n
 -K [file.key]\t\t- Key file to pull packages from the official NGINX repository\n
--D [NAP DoS Version]\t\t- NAP DoS Version ithat is installed to Container\n
 -p \t\t\t- Push Docker image to registry\n
 "
 
@@ -38,7 +37,7 @@ then
 fi
 
 # check option
-while getopts 'ho:i:t:C:K:p:n:' OPTION
+while getopts 'hpo:i:t:C:K:n:' OPTION
 do
         case "$OPTION" in
                 h)
@@ -157,19 +156,20 @@ fi
 
 echo "==> Building NGINX docker image finished."
 
-echo "==> Pushing NGINX docker image."
-
-if "${PUSHIMG}"
+if $PUSHIMG
 then
+   echo "==> Pushing NGINX docker image."
    echo "Push docker image."
    docker push $IMG_NAME
+
+   if [ $? != 0 ]
+   then
+       echo "Container Image Push is Failed."
+       exit
+   fi
+   
+   echo "==> Pushing NGINX docker image finished."
+
 fi
 
 
-if [ $? != 0 ]
-then
-    echo "Container Image Push is Failed."
-    exit
-fi
-
-echo "==> Pushing NGINX docker image finished."
