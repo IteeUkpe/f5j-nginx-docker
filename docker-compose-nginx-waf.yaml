@@ -1,0 +1,30 @@
+version: '3'
+services:
+    nginx-gw0:
+        image: agent-plus-napw:latest
+        hostname: agent-plus-napw0
+        ports:
+        - "8080:80"
+        environment:
+         - NMS_HOST=10.1.1.5
+         - NMS_GRPC_PORT=443
+    nginx-gw1:
+        image: agent-plus-napw:latest
+        hostname: agent-plus-napw1
+        ports:
+        - "8081:80"
+        environment:
+         - NMS_HOST=10.1.1.5
+         - NMS_GRPC_PORT=443
+         - NMS_INSTANCEGROUP=napw-cluster
+         - NMS_TAG=napw-proxy
+    nginx-gw2:
+        image: agent-plus-napw:latest
+        hostname: agent-plus-napw2
+        ports:
+        - "8082:80"
+        environment:
+         - NMS_HOST=10.1.1.5
+         - NMS_GRPC_PORT=443
+         - NMS_INSTANCEGROUP=napw-cluster
+         - NMS_TAG=napw-proxy

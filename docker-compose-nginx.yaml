@@ -10,16 +10,15 @@ services:
         image: agent-plus:latest
         hostname: agent-plus
         ports:
-        - "80:80"
-        - "8080:8080"
+        - "8080:80"
         environment:
          - NMS_HOST=10.1.1.5
          - NMS_GRPC_PORT=443
     nginx-gw:
         image: agent-plus-napw:latest
         hostname: agent-plus-napw
-        deploy:
-            replicas: 1
+        ports:
+        - "8081:80"
         environment:
          - NMS_HOST=10.1.1.5
          - NMS_GRPC_PORT=443
@@ -28,6 +27,6 @@ services:
     nginx-gw2:
         image: plus:latest
         hostname: plus
-        deploy:
-            replicas: 1
+        ports:
+        - "8081:80"
 
