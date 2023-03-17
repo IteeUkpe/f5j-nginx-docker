@@ -12,7 +12,7 @@ services:
         ports:
         - "8080:80"
         environment:
-         - NMS_HOST=10.1.1.5
+         - NMS_HOST=34.211.53.222
          - NMS_GRPC_PORT=443
     nginx-gw:
         image: agent-plus-napw:latest
@@ -20,9 +20,9 @@ services:
         ports:
         - "8081:80"
         environment:
-         - NMS_HOST=10.1.1.5
+         - NMS_HOST=34.211.53.222
          - NMS_GRPC_PORT=443
-         - NMS_INSTANCEGROUP=napw-cluster
+         - NMS_INSTANCEGROUP=nginx_groupB
          - NMS_TAG=napw-proxy
     nginx-gw2:
         image: plus:latest
