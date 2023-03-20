@@ -25,10 +25,10 @@ NGINX_CERT=nginx-repo.crt
 NGINX_KEY=nginx-repo.key
 
 # check running directory
-if [[ $GITURL =~ $BASEGITURL ]]
-then
+#if [[ $GITURL =~ $BASEGITURL ]]
+#then
    INVALID_WORKDIR=false
-fi
+#fi
 
 if "${INVALID_WORKDIR}"
 then
